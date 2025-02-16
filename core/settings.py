@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'travel'
 ]
 
 MIDDLEWARE = [
@@ -43,6 +44,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
+AUTH_USER_MODEL = 'travel.CustomUser'
 
 TEMPLATES = [
     {
@@ -101,9 +103,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'uz'
-LANGUAGES = (
-    ('uz', 'Uzbek')
-)
+LANGUAGES = [
+    ('uz', 'Uzbek'),
+]
 
 TIME_ZONE = 'Asia/Tashkent'
 
