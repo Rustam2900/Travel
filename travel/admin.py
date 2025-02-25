@@ -1,16 +1,59 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, Role
-
-admin.site.register(Role)
+from travel.models import CustomUser, Trip, TripImage, Attendance, Impression, Comment, Reply
 
 
+# Custom User Admin
+@admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
-    model = CustomUser
-    list_display = ('first_name', 'last_name', 'phone_number', 'email', 'age', 'role', 'is_active')
-    fieldsets = UserAdmin.fieldsets + (
-        ('Additional Info', {'fields': ('phone_number', 'age', 'profile_image', 'role')}),
+    list_display = ('username', 'full_name', 'email', 'role', 'phone', 'is_active', 'is_staff')
+    search_fields = ('username', 'full_name', 'email', 'phone')
+    list_filter = ('role', 'is_active', 'is_staff')
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('Personal Info', {'fields': ('full_name', 'email', 'age', 'phone', 'profile_image')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
     )
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
+# Trip Admin
+@admin.register(Trip)
+class TripAdmin(admin.ModelAdmin):
+    list_display = ('name', 'location', 'date', 'created_by')
+    search_fields = ('name', 'location', 'created_by__username')
+    list_filter = ('date',)
+
+
+# Trip Image Admin
+@admin.register(TripImage)
+class TripImageAdmin(admin.ModelAdmin):
+    list_display = ('trip', 'image')
+
+
+# Attendance Admin
+@admin.register(Attendance)
+class AttendanceAdmin(admin.ModelAdmin):
+    list_display = ('trip', 'user', 'registered_at')
+    search_fields = ('trip__name', 'user__username')
+
+
+# Impression Admin
+@admin.register(Impression)
+class ImpressionAdmin(admin.ModelAdmin):
+    list_display = ('trip', 'user', 'title', 'created_at')
+    search_fields = ('trip__name', 'user__username', 'title')
+    list_filter = ('created_at',)
+
+
+# Comment Admin
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('impression', 'user', 'text', 'created_at', 'likes')
+    search_fields = ('impression__title', 'user__username', 'text')
+
+
+# Reply Admin
+@admin.register(Reply)
+class ReplyAdmin(admin.ModelAdmin):
+    list_display = ('comment', 'user', 'text', 'created_at')
+    search_fields = ('comment__text', 'user__username', 'text')
