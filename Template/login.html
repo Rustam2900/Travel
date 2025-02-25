@@ -1,10 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .left-section {
+            width: 50%;
+            background-color: #112D4E;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .left-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .right-section {
+            width: 50%;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: -5px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo h2 {
+            font-size: 20px;
+            color: #112D4E;
+            margin-top: 10px;
+        }
+        form {
+            width: 80%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #112D4E;
+            margin-top: 10px;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+            width: 100%;
+        }
+        .password-container {
+            position: relative;
+        }
+        .password-container input {
+            width: calc(100% - 40px);
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: gray;
+        }
+        button {
+            padding: 12px;
+            background: #112D4E;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #0A1931;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: gray;
+        }
+    </style>
 </head>
 <body>
-$END$
+    <div class="left-section">
+<!--        <img src="{% static 'bux.jpg' %}" alt="Institute Image">-->
+    </div>
+    <div class="right-section">
+        <div class="logo">
+            <h2>Buxoro Muhandislik Texnologiya Instituti</h2>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="username">Login</label>
+            <input type="text" id="username" name="username" placeholder="Enter your login" required>
+
+            <label for="password">Parol</label>
+            <div class="password-container">
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <span class="toggle-password" onclick="togglePassword()">👁️</span>
+            </div>
+
+            <button type="submit">Kirish</button>
+        </form>
+        <div class="footer">
+            Buxoro Muhandislik Texnologiya Instituti
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        }
+    </script>
 </body>
 </html>
