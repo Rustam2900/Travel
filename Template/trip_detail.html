@@ -4,11 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trip Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://static.tildacdn.com/tild3330-6565-4439-b736-663261383039/image.png') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        h2 {
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .back-btn:hover {
+            background: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h2>{{ trip.name }}</h2>
-    <p>Location: {{ trip.location }}</p>
-    <p>Date: {{ trip.date }}</p>
-    <p>Created by: {{ trip.created_by.full_name }}</p>
+    <div class="container">
+        <h2>🌍 {{ trip.name }}</h2>
+        <p><strong>📍 Location:</strong> {{ trip.location }}</p>
+        <p><strong>📅 Date:</strong> {{ trip.date }}</p>
+        <p><strong>👤 Created by:</strong> {{ trip.created_by.full_name }}</p>
+        <a href="{% url 'trip_list' %}" class="back-btn">⬅️ Orqaga</a>
+    </div>
 </body>
 </html>

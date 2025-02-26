@@ -5,19 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trip List</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .trip { border: 1px solid #ddd; padding: 15px; margin: 10px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://static.tildacdn.com/tild3330-6565-4439-b736-663261383039/image.png') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        nav {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover {
+            color: #007BFF;
+        }
+        .trip-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .trip {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 15px;
+            width: 300px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .trip:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        .trip h3 {
+            margin: 0;
+            color: #007BFF;
+        }
+        .trip p {
+            color: #333;
+        }
+        .trip a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .trip a:hover {
+            background: #0056b3;
+        }
     </style>
 </head>
 <body>
-    <h2>Available Trips</h2>
-    {% for trip in trips %}
-        <div class="trip">
-            <h3>{{ trip.name }}</h3>
-            <p>Location: {{ trip.location }}</p>
-            <p>Date: {{ trip.date }}</p>
-            <a href="{% url 'trip_detail' trip.id %}">View Details</a>
-        </div>
-    {% endfor %}
+    <nav>
+        <div class="logo">🌍 Sayohatlar</div>
+        <ul>
+            <li><a href="{% url 'profile' %}">Profil</a></li>
+            <li><a href="{% url 'trip_list' %}">Sayohatlar</a></li>
+            <li><a href="{% url 'trip_list' %}">O'tib ketgan sayohatlar</a></li>
+        </ul>
+    </nav>
+    <h2>🌍 Ajoyib sayohatlar bilan tanishing</h2>
+    <div class="trip-container">
+        {% for trip in trips %}
+            <div class="trip">
+                <h3>✈️ {{ trip.name }}</h3>
+                <p><strong>📍 Location:</strong> {{ trip.location }}</p>
+                <p><strong>📅 Date:</strong> {{ trip.date }}</p>
+                <a href="{% url 'trip_detail' trip.id %}">🌟 Sayohat ko'rish</a>
+            </div>
+        {% empty %}
+            <p>No trips available. Start your adventure soon! 🚀</p>
+        {% endfor %}
+    </div>
 </body>
 </html>
