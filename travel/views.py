@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+
 from .models import Trip, Impression, Comment
-from .forms import UserLoginForm, TripForm, ImpressionForm, CommentForm
+from .forms import UserLoginForm, TripForm, ImpressionForm, CommentForm, CustomUserForm
 
 
 # User Login View
@@ -18,17 +20,48 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 
-# User Logout View
-def user_logout(request):
-    logout(request)
-    return redirect('login')
+@login_required
+def trip_list(request):
+    trips = Trip.objects.all()  # Hamma triplarni olish
+    return render(request, 'trip_list.html', {'trips': trips})
 
 
 # Trip List View
 @login_required
-def trip_list(request):
-    trips = Trip.objects.filter(created_by=request.user)
-    return render(request, 'trip_list.html', {'trips': trips})
+def trip_detail(request, trip_id):
+    trip = get_object_or_404(Trip, id=trip_id, created_by=request.user)
+    return render(request, 'trip_detail.html', {'trip': trip})
+
+
+@login_required
+def profile_view(request):
+    user = request.user  # Hozirgi foydalanuvchi
+    trips = Trip.objects.filter(created_by=user)  # Foydalanuvchiga tegishli sayohatlar
+
+    # Kelayotgan va o‘tib ketgan sayohatlarni ajratib olish
+    upcoming_trips = trips.filter(date__gte=timezone.now().date())  # Hali kelmagan
+    past_trips = trips.filter(date__lt=timezone.now().date())  # O‘tib ketgan
+
+    context = {
+        'user': user,
+        'upcoming_trips': upcoming_trips,
+        'past_trips': past_trips,
+    }
+    return render(request, 'profile.html', context)
+
+
+@login_required
+def profile_edit(request):
+    user = request.user
+    if request.method == 'POST':
+        form = CustomUserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = CustomUserForm(instance=user)
+
+    return render(request, 'profile_edit.html', {'form': form})
 
 
 # Trip Create View
