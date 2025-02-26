@@ -19,28 +19,28 @@ class CustomUserAdmin(UserAdmin):
 # Trip Admin
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
-    list_display = ('name', 'location', 'date', 'created_by')
-    search_fields = ('name', 'location', 'created_by__username')
+    list_display = ('id', 'name', 'location', 'date', 'created_by')
+    search_fields = ('id', 'name', 'location', 'created_by__username')
     list_filter = ('date',)
 
 
 # Trip Image Admin
 @admin.register(TripImage)
 class TripImageAdmin(admin.ModelAdmin):
-    list_display = ('trip', 'image')
+    list_display = ('id', 'trip', 'image')
 
 
 # Attendance Admin
 @admin.register(Attendance)
 class AttendanceAdmin(admin.ModelAdmin):
-    list_display = ('trip', 'user', 'registered_at')
+    list_display = ('id', 'trip', 'user', 'registered_at')
     search_fields = ('trip__name', 'user__username')
 
 
 # Impression Admin
 @admin.register(Impression)
 class ImpressionAdmin(admin.ModelAdmin):
-    list_display = ('trip', 'user', 'title', 'created_at')
+    list_display = ('id', 'trip', 'user', 'title', 'created_at')
     search_fields = ('trip__name', 'user__username', 'title')
     list_filter = ('created_at',)
 
@@ -48,12 +48,12 @@ class ImpressionAdmin(admin.ModelAdmin):
 # Comment Admin
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('impression', 'user', 'text', 'created_at', 'likes')
+    list_display = ('id', 'impression', 'user', 'text', 'created_at', 'likes')
     search_fields = ('impression__title', 'user__username', 'text')
 
 
 # Reply Admin
 @admin.register(Reply)
 class ReplyAdmin(admin.ModelAdmin):
-    list_display = ('comment', 'user', 'text', 'created_at')
+    list_display = ('id', 'comment', 'user', 'text', 'created_at')
     search_fields = ('comment__text', 'user__username', 'text')
