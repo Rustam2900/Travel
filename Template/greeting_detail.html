@@ -1,10 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabrik Batafsil</title>
+    <style>
+        /* Fon rasmi va sharlar animatsiyasi */
+        body {
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            font-family: Arial, sans-serif;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Bayram shari (balloon) */
+        .balloon {
+            position: absolute;
+            width: 50px;
+            height: 70px;
+            background: radial-gradient(circle, #ff4e50, #f9d423);
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: floatUp 5s infinite ease-in-out;
+        }
+
+        .balloon:nth-child(2) {
+            left: 10%;
+            background: radial-gradient(circle, #ff5733, #f1c40f);
+            animation-duration: 6s;
+        }
+
+        .balloon:nth-child(3) {
+            left: 30%;
+            background: radial-gradient(circle, #2980b9, #6dd5ed);
+            animation-duration: 7s;
+        }
+
+        .balloon:nth-child(4) {
+            left: 50%;
+            background: radial-gradient(circle, #8e44ad, #c0392b);
+            animation-duration: 5.5s;
+        }
+
+        .balloon:nth-child(5) {
+            left: 70%;
+            background: radial-gradient(circle, #27ae60, #2ecc71);
+            animation-duration: 6.5s;
+        }
+
+        .balloon:nth-child(6) {
+            left: 90%;
+            background: radial-gradient(circle, #e74c3c, #e67e22);
+            animation-duration: 7.2s;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-10vh);
+                opacity: 1;
+            }
+        }
+
+        /* Tabrik kartochkasi */
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            margin: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff4e50;
+        }
+
+        .message {
+            font-size: 18px;
+            font-style: italic;
+            margin: 10px 0;
+        }
+
+        .date {
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* Tugmalar */
+        .btn {
+            display: inline-block;
+            background-color: #ff4e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #c0392b;
+        }
+
+        .back-btn {
+            background-color: #27ae60;
+        }
+
+        .back-btn:hover {
+            background-color: #1e8449;
+        }
+    </style>
 </head>
 <body>
-$END$
+
+    <!-- Bayram sharlari -->
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+    <div class="balloon"></div>
+
+    <h2 class="title">🎂 Tug‘ilgan kun tabrigi! 🎉</h2>
+
+    <div class="card">
+        <h3>🎈 {{ greeting.sender }} ➡️ {{ greeting.user }}</h3>
+        <p class="date">📅 Sana: {{ greeting.created_at|date:"d.m.Y" }}</p>
+        <p class="message">💌 "{{ greeting.message }}"</p>
+
+        {% if greeting.image %}
+            <img src="{{ greeting.image.url }}" alt="Tabrik surati" style="width: 100%; max-width: 400px; border-radius: 5px;">
+        {% endif %}
+
+        <br><br>
+        <a href="{% url 'greetings_list' %}" class="btn back-btn">⬅️ Orqaga</a>
+    </div>
+
 </body>
 </html>
