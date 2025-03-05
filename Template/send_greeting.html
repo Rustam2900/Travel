@@ -1,22 +1,78 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="container">
-    <h2>🎉 Tug‘ilgan kun bilan tabriklash</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="user">👤 Kimni tabriklash:</label>
-            {{ form.user }}
-        </div>
-        <div class="mb-3">
-            <label for="message">📜 Tabrik matni:</label>
-            {{ form.message }}
-        </div>
-        <div class="mb-3">
-            <label for="image">🖼️ Rasm qo‘shish (ixtiyoriy):</label>
-            {{ form.image }}
-        </div>
-        <button type="submit" class="btn btn-success">📨 Yuborish</button>
-    </form>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tug‘ilgan kun bilan tabriklash</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🎉 Tug‘ilgan kun bilan tabriklash</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="user">👤 Kimni tabriklash:</label>
+                {{ form.user }}
+            </div>
+            <div class="form-group">
+                <label for="message">📜 Tabrik matni:</label>
+                {{ form.message }}
+            </div>
+            <div class="form-group">
+                <label for="image">🖼️ Rasm qo‘shish (ixtiyoriy):</label>
+                {{ form.image }}
+            </div>
+            <button type="submit">📨 Yuborish</button>
+        </form>
+    </div>
+</body>
+</html>
