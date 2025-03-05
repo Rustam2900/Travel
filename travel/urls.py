@@ -4,6 +4,9 @@ from travel import views
 urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('trips/', views.trip_list, name='trip_list'),
+    path('create-trip/', views.create_trip, name='create_trip'),
+    path('user-search/', views.user_search, name='user_search'),
+    path('trip/<int:trip_id>/attendance/', views.trip_attendance, name='trip_attendance'),
     path('trips/<int:trip_id>/', views.trip_detail, name='trip_detail'),
     path('profile/', views.profile_view, name='profile'),
     path('profile/edit/', views.profile_edit, name='profile_edit'),
