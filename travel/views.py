@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.timezone import now, timedelta
 from django.http import JsonResponse
+from datetime import date
 
 from travel.models import Trip, Impression, Attendance, CustomUser
-from travel.forms import UserLoginForm, TripForm, ImpressionForm, CommentForm, CustomUserForm
+from travel.forms import UserLoginForm, TripForm, ImpressionForm, CommentForm, CustomUserForm, BirthdayGreetingForm
 
 
 def user_login(request):
@@ -153,3 +154,23 @@ def trip_attendance(request, trip_id):
         return redirect('profile')
 
     return render(request, 'trip_attendance.html', {'users': users, 'trip': trip})
+
+
+def past_trips(request):
+    trips = Trip.objects.filter(date__lt=date.today())  # Faqat o'tib ketganlar
+    return render(request, 'past_trips.html', {'trips': trips})
+
+
+def send_birthday_greeting(request):
+    if request.method == "POST":
+        form = BirthdayGreetingForm(request.POST, request.FILES)
+        if form.is_valid():
+            greeting = form.save(commit=False)
+            greeting.sender = request.user  # Hozirgi user yuboruvchi
+            greeting.save()
+            return redirect('home')  # Tabrik yuborilgandan keyin bosh sahifaga qaytish
+    else:
+        form = BirthdayGreetingForm()
+
+    users = CustomUser.objects.all()  # Tanlash uchun barcha userlar ro‘yxati
+    return render(request, 'send_greeting.html', {'form': form, 'users': users})
