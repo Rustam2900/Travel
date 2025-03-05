@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import CustomUser, Trip, Impression, Comment
+from .models import CustomUser, Trip, Impression, Comment, BirthdayGreeting
 from django_select2.forms import Select2MultipleWidget
 
 
@@ -65,3 +65,14 @@ class AttendanceForm(forms.Form):
         widget=Select2MultipleWidget,
         label="Sayohatga boradiganlar"
     )
+
+
+class BirthdayGreetingForm(forms.ModelForm):
+    class Meta:
+        model = BirthdayGreeting
+        fields = ['user', 'message', 'image']
+        widgets = {
+            'user': forms.Select(attrs={'class': 'form-control'}),
+            'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+        }
