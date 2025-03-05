@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>🎉 Tug‘ilgan kun bilan tabriklash</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="user">👤 Kimni tabriklash:</label>
+            {{ form.user }}
+        </div>
+        <div class="mb-3">
+            <label for="message">📜 Tabrik matni:</label>
+            {{ form.message }}
+        </div>
+        <div class="mb-3">
+            <label for="image">🖼️ Rasm qo‘shish (ixtiyoriy):</label>
+            {{ form.image }}
+        </div>
+        <button type="submit" class="btn btn-success">📨 Yuborish</button>
+    </form>
+</div>
+{% endblock %}
