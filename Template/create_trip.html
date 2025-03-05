@@ -1,10 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sayohat yaratish</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Umumiy body foni */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('https://static.tildacdn.com/tild3330-6565-4439-b736-663261383039/image.png') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+        /* Kartochka uslubi */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        /* Sarlavha */
+        h2 {
+            color: #007BFF;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        /* Tugmalar */
+        .btn-primary {
+            background: #28a745;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover {
+            background: #218838;
+        }
+        .btn-secondary {
+            background: #dc3545;
+            border: none;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-secondary:hover {
+            background: #c82333;
+        }
+        /* Form elementlari */
+        form input, form textarea, form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+    </style>
 </head>
 <body>
-$END$
+
+<div class="container mt-5">
+    <div class="card">
+        <h2>🗺️ Yangi Sayohat Yaratish</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    var dateField = document.querySelector("input[name='date']");
+                    var today = new Date();
+                    today.setDate(today.getDate() + 1);
+                    var minDate = today.toISOString().split("T")[0];
+                    dateField.setAttribute("min", minDate);
+                });
+
+            </script>
+            <button type="submit" class="btn btn-primary">✅ Kimlar boradi?</button>
+        </form>
+        <a href="{% url 'profile' %}" class="btn btn-secondary">❌ Bekor qilish</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

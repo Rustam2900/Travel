@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trip Details</title>
+    <title>Sayohat Tafsilotlari</title>
     <style>
         * {
             margin: 0;
@@ -40,6 +40,17 @@
             color: #333;
             margin-bottom: 10px;
         }
+        .attendees-list {
+            list-style: none;
+            padding: 0;
+        }
+        .attendees-list li {
+            background: #007BFF;
+            color: white;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+        }
         .back-btn {
             display: inline-block;
             margin-top: 15px;
@@ -58,9 +69,21 @@
 <body>
     <div class="container">
         <h2>🌍 {{ trip.name }}</h2>
-        <p><strong>📍 Location:</strong> {{ trip.location }}</p>
-        <p><strong>📅 Date:</strong> {{ trip.date }}</p>
-        <p><strong>👤 Created by:</strong> {{ trip.created_by.full_name }}</p>
+        <p><strong>📍 Joylashuv:</strong> {{ trip.location }}</p>
+        <p><strong>📅 Sana:</strong> {{ trip.date }}</p>
+        <p><strong>👤 Yaratgan:</strong> {{ trip.created_by.full_name }}</p>
+
+        <h3>📋 Sayohatga boradiganlar:</h3>
+        {% if attendees %}
+            <ul class="attendees-list">
+                {% for attendee in attendees %}
+                    <li>{{ attendee.user.full_name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>🚫 Hozircha hech kim ro‘yxatdan o‘tmagan.</p>
+        {% endif %}
+
         <a href="{% url 'trip_list' %}" class="back-btn">⬅️ Orqaga</a>
     </div>
 </body>
