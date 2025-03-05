@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from travel.models import CustomUser, Trip, TripImage, Attendance, Impression, Comment, Reply
+from travel.models import CustomUser, Trip, TripImage, Attendance, Impression, Comment, Reply, BirthdayGreeting
 
 
 # Custom User Admin
@@ -22,6 +22,13 @@ class TripAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'location', 'date', 'created_by')
     search_fields = ('id', 'name', 'location', 'created_by__username')
     list_filter = ('date',)
+
+
+@admin.register(BirthdayGreeting)
+class BirthdayGreetingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'sender', 'message', 'image', 'created_at')
+    search_fields = ('id', 'message', 'created_at')
+    list_filter = ('created_at',)
 
 
 # Trip Image Admin
