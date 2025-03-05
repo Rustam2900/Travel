@@ -157,7 +157,7 @@ def trip_attendance(request, trip_id):
 
 
 def past_trips(request):
-    trips = Trip.objects.filter(date__lt=date.today())  # Faqat o'tib ketganlar
+    trips = Trip.objects.filter(date__lt=date.today())
     return render(request, 'past_trips.html', {'trips': trips})
 
 
@@ -166,11 +166,11 @@ def send_birthday_greeting(request):
         form = BirthdayGreetingForm(request.POST, request.FILES)
         if form.is_valid():
             greeting = form.save(commit=False)
-            greeting.sender = request.user  # Hozirgi user yuboruvchi
+            greeting.sender = request.user
             greeting.save()
-            return redirect('home')  # Tabrik yuborilgandan keyin bosh sahifaga qaytish
+            return redirect('home')
     else:
         form = BirthdayGreetingForm()
 
-    users = CustomUser.objects.all()  # Tanlash uchun barcha userlar ro‘yxati
+    users = CustomUser.objects.all()
     return render(request, 'send_greeting.html', {'form': form, 'users': users})
