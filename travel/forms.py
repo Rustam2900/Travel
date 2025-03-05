@@ -1,9 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from .models import CustomUser, Trip, Impression, Comment
+from django_select2.forms import Select2MultipleWidget
 
 
-# User Login Form
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
@@ -22,7 +22,6 @@ class CustomUserForm(forms.ModelForm):
         }
 
 
-# Trip Form
 class TripForm(forms.ModelForm):
     class Meta:
         model = Trip
@@ -34,7 +33,6 @@ class TripForm(forms.ModelForm):
         }
 
 
-# Impression Form
 class ImpressionForm(forms.ModelForm):
     class Meta:
         model = Impression
@@ -46,7 +44,6 @@ class ImpressionForm(forms.ModelForm):
         }
 
 
-# Comment Form
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -54,3 +51,17 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'text': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
         }
+
+
+class TripForm(forms.ModelForm):
+    class Meta:
+        model = Trip
+        fields = ['name', 'location', 'date']
+
+
+class AttendanceForm(forms.Form):
+    users = forms.ModelMultipleChoiceField(
+        queryset=CustomUser.objects.all(),
+        widget=Select2MultipleWidget,
+        label="Sayohatga boradiganlar"
+    )
