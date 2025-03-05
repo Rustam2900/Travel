@@ -3,10 +3,10 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.timezone import now, timedelta
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from datetime import date
 
-from travel.models import Trip, Impression, Attendance, CustomUser
+from travel.models import Trip, Impression, Attendance, CustomUser, BirthdayGreeting
 from travel.forms import UserLoginForm, TripForm, ImpressionForm, CommentForm, CustomUserForm, BirthdayGreetingForm
 
 
@@ -161,16 +161,28 @@ def past_trips(request):
     return render(request, 'past_trips.html', {'trips': trips})
 
 
-def send_birthday_greeting(request):
+def birthday_greeting_view(request):
     if request.method == "POST":
         form = BirthdayGreetingForm(request.POST, request.FILES)
         if form.is_valid():
-            greeting = form.save(commit=False)
-            greeting.sender = request.user
+            greeting = form.save(commit=False)  # Avval commit qilmaymiz
+            if request.user.is_authenticated:  # Foydalanuvchi tizimga kirganmi?
+                greeting.sender = request.user  # `sender` maydoniga foydalanuvchini qo‘shamiz
+            else:
+                return HttpResponse("Siz tizimga kirmagansiz!", status=403)
             greeting.save()
-            return redirect('home')
+            return redirect("trip_list")  # Muvaffaqiyatli saqlangandan keyin yo‘naltirish
     else:
         form = BirthdayGreetingForm()
 
-    users = CustomUser.objects.all()
-    return render(request, 'send_greeting.html', {'form': form, 'users': users})
+    return render(request, "send_greeting.html", {"form": form})
+
+
+def birthday_greetings_list(request):
+    greetings = BirthdayGreeting.objects.all().order_by('-created_at')  # Eng oxirgi tabriklar yuqorida bo'ladi
+    return render(request, 'greetings_list.html', {'greetings': greetings})
+
+
+def birthday_greeting_detail(request, greeting_id):
+    greeting = get_object_or_404(BirthdayGreeting, id=greeting_id)
+    return render(request, 'greeting_detail.html', {'greeting': greeting})

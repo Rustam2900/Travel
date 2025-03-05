@@ -68,11 +68,22 @@ class AttendanceForm(forms.Form):
 
 
 class BirthdayGreetingForm(forms.ModelForm):
+    user = forms.ModelChoiceField(
+        queryset=CustomUser.objects.all(),
+        empty_label="Foydalanuvchini tanlang",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        label="Tabrik matni"
+    )
+
+    image = forms.ImageField(
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = BirthdayGreeting
         fields = ['user', 'message', 'image']
-        widgets = {
-            'user': forms.Select(attrs={'class': 'form-control'}),
-            'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'image': forms.FileInput(attrs={'class': 'form-control'}),
-        }
