@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.utils.timezone import now, timedelta
+from django.http import JsonResponse
 
-from .models import Trip, Impression, Comment
-from .forms import UserLoginForm, TripForm, ImpressionForm, CommentForm, CustomUserForm
+from travel.models import Trip, Impression, Attendance, CustomUser
+from travel.forms import UserLoginForm, TripForm, ImpressionForm, CommentForm, CustomUserForm
 
 
-# User Login View
 def user_login(request):
     if request.method == "POST":
         form = UserLoginForm(data=request.POST)
@@ -22,25 +23,28 @@ def user_login(request):
 
 @login_required
 def trip_list(request):
-    trips = Trip.objects.all()  # Hamma triplarni olish
+    trips = Trip.objects.all()
     return render(request, 'trip_list.html', {'trips': trips})
 
 
-# Trip List View
 @login_required
 def trip_detail(request, trip_id):
-    trip = get_object_or_404(Trip, id=trip_id, created_by=request.user)
-    return render(request, 'trip_detail.html', {'trip': trip})
+    trip = get_object_or_404(Trip, id=trip_id)
+    attendees = Attendance.objects.filter(trip=trip).select_related('user')
+
+    return render(request, 'trip_detail.html', {
+        'trip': trip,
+        'attendees': attendees
+    })
 
 
 @login_required
 def profile_view(request):
-    user = request.user  # Hozirgi foydalanuvchi
-    trips = Trip.objects.filter(created_by=user)  # Foydalanuvchiga tegishli sayohatlar
+    user = request.user
+    trips = Trip.objects.filter(created_by=user)
 
-    # Kelayotgan va o‘tib ketgan sayohatlarni ajratib olish
-    upcoming_trips = trips.filter(date__gte=timezone.now().date())  # Hali kelmagan
-    past_trips = trips.filter(date__lt=timezone.now().date())  # O‘tib ketgan
+    upcoming_trips = trips.filter(date__gte=timezone.now().date())
+    past_trips = trips.filter(date__lt=timezone.now().date())
 
     context = {
         'user': user,
@@ -64,7 +68,6 @@ def profile_edit(request):
     return render(request, 'profile_edit.html', {'form': form})
 
 
-# Trip Create View
 @login_required
 def trip_create(request):
     if request.method == "POST":
@@ -79,7 +82,6 @@ def trip_create(request):
     return render(request, 'trip_form.html', {'form': form})
 
 
-# Impression Create View
 @login_required
 def impression_create(request, trip_id):
     trip = get_object_or_404(Trip, id=trip_id)
@@ -96,7 +98,6 @@ def impression_create(request, trip_id):
     return render(request, 'impression_form.html', {'form': form})
 
 
-# Comment Create View
 @login_required
 def comment_create(request, impression_id):
     impression = get_object_or_404(Impression, id=impression_id)
@@ -111,3 +112,44 @@ def comment_create(request, impression_id):
     else:
         form = CommentForm()
     return render(request, 'comment_form.html', {'form': form})
+
+
+@login_required
+def create_trip(request):
+    if request.method == "POST":
+        form = TripForm(request.POST)
+        if form.is_valid():
+            trip = form.save(commit=False)
+            trip.created_by = request.user
+            trip.save()
+            return redirect('trip_attendance', trip_id=trip.id)
+    else:
+        form = TripForm()
+        form.fields['date'].widget.attrs['min'] = (now() + timedelta(days=1)).date()
+
+    return render(request, 'create_trip.html', {'form': form})
+
+
+def user_search(request):
+    query = request.GET.get('query', '').strip()
+    if not query:
+        users = CustomUser.objects.all()[:10]
+    else:
+        users = CustomUser.objects.filter(username__icontains=query)[:10]
+
+    return JsonResponse({"users": list(users.values("id", "username", "full_name"))})
+
+
+@login_required
+def trip_attendance(request, trip_id):
+    trip = get_object_or_404(Trip, id=trip_id)
+    users = CustomUser.objects.all()
+
+    if request.method == "POST":
+        selected_user_ids = request.POST.getlist('users')
+        for user_id in selected_user_ids:
+            user = CustomUser.objects.get(id=user_id)
+            Attendance.objects.get_or_create(trip=trip, user=user)
+        return redirect('profile')
+
+    return render(request, 'trip_attendance.html', {'users': users, 'trip': trip})
