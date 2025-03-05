@@ -3,7 +3,6 @@ from django.db import models
 from django.utils import timezone
 
 
-# Custom User Model
 class CustomUser(AbstractUser):
     ROLE_CHOICES = [
         ('teacher', 'O‘qituvchi'),
@@ -23,7 +22,6 @@ class CustomUser(AbstractUser):
         return self.username
 
 
-# Trip Model
 class Trip(models.Model):
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
@@ -38,13 +36,11 @@ class Trip(models.Model):
         return f"{self.name} - {self.location} ({'Active' if self.is_active else 'Inactive'})"
 
 
-# Trip Images
 class TripImage(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='trip_images/')
 
 
-# Attendance Model (Users who registered for a trip)
 class Attendance(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='attendees')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -54,7 +50,6 @@ class Attendance(models.Model):
         return f"{self.user.full_name} registered for {self.trip.name}"
 
 
-# Impression Model (User Posts after Trip)
 class Impression(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name='impressions')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -67,7 +62,6 @@ class Impression(models.Model):
         return self.title
 
 
-# Comments on Impression
 class Comment(models.Model):
     impression = models.ForeignKey(Impression, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -79,7 +73,6 @@ class Comment(models.Model):
         return f"{self.user.full_name} commented on {self.impression.title}"
 
 
-# Replies to Comments
 class Reply(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='replies')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
