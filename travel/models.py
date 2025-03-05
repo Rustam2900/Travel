@@ -81,3 +81,14 @@ class Reply(models.Model):
 
     def __str__(self):
         return f"{self.user.full_name} replied to {self.comment.user.full_name}"
+
+
+class BirthdayGreeting(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Kimni tabriklaymiz
+    sender = models.ForeignKey(CustomUser, related_name="sent_greetings", on_delete=models.CASCADE)  # Kim yuboradi
+    message = models.TextField()  # Tabrik matni
+    image = models.ImageField(upload_to='greetings/', blank=True, null=True)  # Tabrik rasmi
+    created_at = models.DateTimeField(auto_now_add=True)  # Qachon yuborilgan
+
+    def __str__(self):
+        return f"{self.sender} → {self.user} (Tabrik)"
